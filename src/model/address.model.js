@@ -14,15 +14,14 @@ const addressSchema = new mongoose.Schema({
     city: {
         type: String,
         required: true,
-        trim: true
+        trim: true 
     },
     state: {
         type: String,
         required: true,
         trim: true
     },
-    postalCode: { // Changed to camelCase for consistency
-        type: String,
+    postalCode: { 
         required: true,
         trim: true
     },
