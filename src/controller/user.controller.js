@@ -108,10 +108,18 @@ const loginUser= async(req,res)=>{
 
 //logout the user
 
-const logoutUser= await(req,res)=>{
+const logoutUser=(req,res)=>{
+    const options={
+        httpOnly:true,
+        secure:process.env.NODE_ENV=== 'production',
+    };
 
-}
+    return res
+    .status(200)
+    .clearCookie("token",options) //clear the token cookie
+    .json({message:'User logged out successfully'});
+};
 
 
 
-export {registerUser,loginUser}
+export {registerUser,loginUser,logoutUser}
