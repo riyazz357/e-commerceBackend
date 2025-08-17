@@ -1,5 +1,6 @@
 import {User} from '../model/user.model.js'
 import bcrypt from 'bcrypt';
+import { json } from 'express';
 import jwt from 'jsonwebtoken';
 
 //registering user
@@ -120,6 +121,50 @@ const logoutUser=(req,res)=>{
     .json({message:'User logged out successfully'});
 };
 
+//fetch the user profile
+
+const getUserProfile= async(req,res)=>{
+    const user = await User.findById(req.user._id).select(
+        "-password"
+    )
+
+    if(!user){
+        return res
+        .status(404)
+        .json({message:"user not found"})
+    }
+    return res
+    .status(200)
+    .json({message:"User profile fetched successfully",user})
+};
+
+//updating the user profile 
+
+const updateUserProfile= async(req,res)=>{
+    const {fullname,email}=req.body;
+
+    if(!email || !fullname){
+        return res
+        .status(400)
+        .json({message:"No feild to update buddy"})
+    }
+
+    const updateUser= await User.findByIdAndUpdate(req.user._id,
+        {
+            $set:{
+                fullname,email
+            }
+        },{new:true}).select('-password');
+
+        return res
+        .status(200)
+        .json({message:"user updated successfully",updateUser
+
+        });
+
+}
 
 
-export {registerUser,loginUser,logoutUser}
+
+
+export {registerUser,loginUser,logoutUser,getUserProfile,updateUserProfile}
