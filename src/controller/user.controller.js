@@ -164,7 +164,28 @@ const updateUserProfile= async(req,res)=>{
 
 }
 
+//changing the password of the user 
+const changePassword=async(req,res)=>{
+    const {oldpassword,newPassword}=req.body;
+
+    const user= await User.findById(req.user._id);
+
+    const isPasswordCorrect=await bcrypt.compare(oldpassword,user.password);
+    if(!isPasswordCorrect){
+        return res
+        .status(401)
+        .json({message:"old password is incorrect"});
+    }
+    user.password=newPassword;
+    await user.save({validateBeforeSave:false});
+
+    return res
+    .status(200)
+    .json({message:"password changed successfully"});
+
+}
 
 
 
-export {registerUser,loginUser,logoutUser,getUserProfile,updateUserProfile}
+
+export {registerUser,loginUser,logoutUser,getUserProfile,updateUserProfile,changePassword}
