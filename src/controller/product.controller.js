@@ -1,3 +1,4 @@
+import { Category } from "../model/category.model.js";
 import { Product } from "../model/products.model.js";
 
 const createProduct= async(req,res)=>{
@@ -35,4 +36,59 @@ const createProduct= async(req,res)=>{
     }
 }
 
-export {createProduct}
+//get all product 
+
+const getAllProducts= async(req,res)=>{
+    try {
+        const {category,search}=req.query;
+        let query={}
+        if(category){
+            query.category=category;
+        }
+        if(search){
+            query.name={ $regex: search, $options: 'i' }
+        }
+
+        const sortBy=req.query.sortBy || 'createdAt';
+        const sortOrder=req.query.sortOrder==="desc"?-1:1;
+        const sortOptions={[sortBy]:sortOrder};
+
+        const page=parseInt(req.query.page)||1;
+        const limit=parseInt(req.query.limit)||10;
+        const skip=(page-1)*limit;
+
+        const products= await Product
+        .find(query)
+        .sort(sortOptions)
+        .skip(skip)
+        .limit(limit)
+        .populate('category','name');
+
+        const totalProducts=await Product.countDocuments(query);
+
+
+        
+        return res
+        .status(200)
+        .json({message:"All products fetched successfully",products,
+            pagination:{
+                totalProducts,
+                totalPages:Math.ceil(totalProducts/limit),
+                currentPage:page,
+            }
+        });
+
+    }
+    catch(error) 
+    {
+        return res
+        .status(500)
+        .json({message:"server error while getting all products",error:error.message});
+
+    }
+}
+
+
+
+
+export {createProduct,getAllProducts}
