@@ -51,7 +51,7 @@ const getAllCategories= async(req,res)=>{
    }
 }
 
-
+//updating the category......
 const updateCategory= async(req,res)=>{
     try{
         const{name,description}=req.body;
@@ -79,7 +79,29 @@ const updateCategory= async(req,res)=>{
     }
 }
 
+//delete the category
+
+const deleteCategory= async(req,res)=>{
+    try{
+        const{id}=req.params;
+        const deleteCategory= await Category.findByIdAndDelete(id);
+        if(!deleteCategory){
+            return res
+            .status(404)
+            .json({message:"category not found!!!"})
+        }
+        return res
+        .status(200)
+        .json({message:"category deleted successfully!!!"})
+
+    }catch(error){
+        return res
+        .status(500)
+        .json({message:"server error while deleting!!!",error:error.message})
+    }
+}
 
 
 
-export {createCategory}
+
+export {createCategory,updateCategory,getAllCategories}
