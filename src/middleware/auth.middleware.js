@@ -29,4 +29,15 @@ const verifyJWT= async(req,res)=>{
     }
 };
 
-export {verifyJWT}
+const isAdmin= async(req,res)=>{
+    if(req.user && req.user.role==='admin'){
+        next();
+    }
+    else{
+        return res
+        .status(403)
+        .json({message:"access denied!! Admin privilages required"})
+    }
+}
+
+export {verifyJWT,isAdmin}
