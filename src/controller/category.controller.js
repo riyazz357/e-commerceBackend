@@ -34,15 +34,21 @@ const createCategory= async(req,res)=>{
     }
 }
 
-const getAllCategories= async(req,res)=>{
-    const {name,description}=req.body();
+//get all the categories
 
-    if(!name || !category){
+const getAllCategories= async(req,res)=>{
+   try
+   {
+        const categories= await Category.find({});
         return res
-        .status(400)
-        .json({message:"category name and category are required"});
-    }
-    const categories= await Category.find({name,description})
+        .status(200)
+        .json({message:"categories fetched successfully!!!",categories})
+   }catch(error){
+    return res
+    .status(500)
+    .json({message:"server error while fetching categories",error:error.message})
+
+   }
 }
 
 
