@@ -82,12 +82,17 @@ const loginUser= async(req,res)=>{
                 expiresIn:'1D'
             }
         );
+        const options={
+            httpOnly:true,
+            secure:process.env.NODE_ENV=== 'production'
+        }
 
         const loggedInUser= await User.findById(user._id).select(
             "-password"
         )
         return res
         .status(200)
+        .cookie("token",token,options) //set the cookie
         .json({
         message:"User logged in successfully",
         user:loggedInUser,
@@ -101,5 +106,12 @@ const loginUser= async(req,res)=>{
     }
 }
 
+//logout the user
 
-export {registerUser}
+const logoutUser= await(req,res)=>{
+
+}
+
+
+
+export {registerUser,loginUser}
