@@ -8,7 +8,7 @@ import{
     getUserProfile
 } from "../controllers/userController.js";
 
-import {verifyJWT} from "../middleware/authMiddleware.js";
+import {verifyJWT} from "../middleware/auth.middleware.js";
 
 const router=Router();
 
