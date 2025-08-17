@@ -53,7 +53,30 @@ const getAllCategories= async(req,res)=>{
 
 
 const updateCategory= async(req,res)=>{
-    const{name,}
+    try{
+        const{name,description}=req.body;
+        const {id}=req.params;
+
+        const updateCategory=await Category.findByIdAndUpdate(
+            id,
+            {name,description},
+            {new:true}
+        );
+        if(!updateCategory){
+            return res
+            .status(404)
+            .json({message:"category not found!!!"})
+        }
+        return res
+        .status(200)
+        .json({message:"category updated successfully!!!",updateCategory})
+
+    }
+    catch(error){
+        return res
+        .status(500)
+        .json({message:"server error while updating category",error:error.message})
+    }
 }
 
 
