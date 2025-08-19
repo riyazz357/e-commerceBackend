@@ -15,9 +15,11 @@ app.use(cookieparser());
 
 import userRouter from "./routes/user.router.js";
 import { categoryRouter } from "./model/category.model.js";
+import { ProductRouter } from "./model/products.model.js";
 
 app.use("/api/v1/users",userRouter);
 app.use('/api/v1/categories',categoryRouter);
+app.use("/api/v1/products",ProductRouter);
 
 
 export {app}
