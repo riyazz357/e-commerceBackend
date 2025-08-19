@@ -46,7 +46,7 @@ const getAllProducts= async(req,res)=>{
             query.category=category;
         }
         if(search){
-            query.name={ $regex: search, $options: 'i' }
+            query.name={ $regex: search, $options: 'i' } //case insensitive
         }
 
         const sortBy=req.query.sortBy || 'createdAt';
@@ -88,7 +88,41 @@ const getAllProducts= async(req,res)=>{
     }
 }
 
+//updating the product
+const updateProduct= async(req,res)=>{
+    try {
+        const {id}=req.params;
+        const {name,description,price,category,stock}=req.body;
+
+        const updatedProduct= await Product.findByIdAndUpdate(id,{
+            $set:{
+                name,
+                description,
+                price,
+                category,
+                stock
+            }
+        },{new:true}).populate('category','name');
+
+        if(!updatedProduct){
+            return res
+            .status(400)
+            .json({message:"product not found!!"})
+        }
+        return res
+        .status(200)
+        .json({message:"product is updated successfylly!!",product:updatedProduct})
+
+        
+    } 
+    catch (error) {
+        return res
+        .status(401)
+        .json({message:"error while updating the product",error:error.message})
+        
+    }
+}
 
 
 
-export {createProduct,getAllProducts}
+export {createProduct,getAllProducts,updateProduct}
