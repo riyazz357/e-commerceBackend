@@ -1,3 +1,4 @@
+import { connect } from "mongoose";
 import { Category } from "../model/category.model.js";
 import { Product } from "../model/products.model.js";
 
@@ -123,6 +124,30 @@ const updateProduct= async(req,res)=>{
     }
 }
 
+//Deleting the product
+const deleteProduct= async(req,res)=>{
+    try{const {id}=req.params;
+    const deleteProduct= await Product.finfByIdAndDelete(id);
+
+    if(!deleteProduct){
+        return res
+        .status(401)
+        .json({message:"product not foundd!!"})
+    }
+
+    return res
+    .status(200)
+    .json({message:"Product deleted successfully..."})
+   
+
+}catch(error){
+    return res
+    .status(501)
+    .json({message:"server error while deleting the products.",error:error.message})
+
+}
+}
 
 
-export {createProduct,getAllProducts,updateProduct}
+
+export {createProduct,getAllProducts,updateProduct,deleteProduct}
