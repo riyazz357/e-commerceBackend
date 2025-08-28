@@ -57,6 +57,7 @@ catch(error){
 
 };
 
+// Get orders for a user
 const getOrders= async (req,res) =>{
     try{
         const orders=await Order.find({user:req.user._Id}).sort({createdAt:-1})
@@ -71,4 +72,34 @@ const getOrders= async (req,res) =>{
     }
 }
 
-export {createOrder,getOrders};
+const orderStatusUpdate=async(req,res)=>{
+    try{
+        const {orderId}=req.params;
+        const {status}=req.body;
+
+        if(!status){
+            return res
+            .status(400)
+            .json({message:"Status is required"});
+        }
+        const order= await Order.findByIdAndUpdate(orderId,{status},{new:true});
+        if (!order){
+            return res
+            .status(404)
+            .json({message:"Order not found"});
+        }
+        return res
+        .status(200)
+        .json({message:"Order status updated successfully",order});
+
+    }
+    catch(error){
+        return res
+        .status(500)
+        .json({message:"Internal Server Error",error:error.message});
+    }
+}
+
+
+
+export {createOrder,getOrders,orderStatusUpdate};
