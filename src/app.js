@@ -17,11 +17,13 @@ import userRouter from "./routes/user.router.js";
 import { categoryRouter } from "./model/category.model.js";
 import { ProductRouter } from "./model/products.model.js";
 import cartRouter from "./routes/cart.routes.js";
+import orderRouter from "./routes/order.routes.js";
 
 app.use("/api/v1/users",userRouter);
 app.use('/api/v1/categories',categoryRouter);
 app.use("/api/v1/products",ProductRouter);
 app.use("/api/v1/cart",cartRouter);
+app.use("/api/v1/orders",orderRouter);
 
 
 export {app}
