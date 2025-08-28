@@ -57,5 +57,18 @@ catch(error){
 
 };
 
+const getOrders= async (req,res) =>{
+    try{
+        const orders=await Order.find({user:req.user._Id}).sort({createdAt:-1})
+        return res
+        .status(200)
+        .json({message:"Orders fetched successfully!!!",orders});
+    }
+    catch(error){
+        return res
+        .status(500)
+        .json({message:"Internal Server Error",error:error.message});
+    }
+}
 
-export {createOrder};
+export {createOrder,getOrders};
